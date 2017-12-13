@@ -11,6 +11,7 @@
            (begin
              (when (select? col) (output from to (> selected 0)))
              (print)))
+          ;; TODO: support quotes
           ((eq? (string-ref line to) #\,)
            (begin
              (when (select? col) (output from to (> selected 0)))
