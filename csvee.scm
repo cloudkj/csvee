@@ -4,26 +4,28 @@
 (define (parse line columns)
   ;; TODO: optimizations - `columns` can be looked up in O(1) and collected as
   ;; each index is examined
-  (define (select from to count selected)
+  (define (output from to delim)
+    (format #t (if delim ",~A" "~A") (substring line from to)))
+  (define (select from to count many?)
     (cond ((>= to (string-length line))
-           (if (member (+ count 1) columns)
-               (cons (substring line from to) selected)
-               selected))
+           (begin
+             (when (member (+ count 1) columns)
+                   (output from to many?))
+             (print)))
           ((eq? (string-ref line to) #\,)
-           (select (+ to 1) (+ to 1) (+ count 1)
-                     (if (member (+ count 1) columns)
-                         (cons (substring line from to) selected)
-                         selected)))
+           (begin
+             (when (member (+ count 1) columns)
+                   (output from to many?))
+             (select (+ to 1) (+ to 1) (+ count 1) #t)))
           (else
-           (select from (+ to 1) count selected))))
-  ;; TODO: select can simply print out selected columns
-  (select 0 0 0 (list)))
+           (select from (+ to 1) count many?))))
+  (select 0 0 0 #f))
 
 (define (read-input columns)
   (let ((line (read-line)))
     (when (not (eof-object? line))
           (begin
-            (print "parsed: " (parse line columns) "\n")
+            (parse line columns)
             (read-input columns)))))
 
 (let* ((grammar '((column "Columns to select"
