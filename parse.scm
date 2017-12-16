@@ -1,3 +1,5 @@
+(declare (unit parse))
+
 (use extras srfi-13 srfi-69)
 
 (define (parse line columns)

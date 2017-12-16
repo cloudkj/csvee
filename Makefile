@@ -1,8 +1,9 @@
 csvee:
-	csc csvee.scm
+	csc -c parse.scm
+	csc csvee.scm parse.o -o csvee
 
 clean:
-	rm -rf csvee
+	rm -rf csvee *.o
 
 test:
 	csi -q -b parse_test.scm
